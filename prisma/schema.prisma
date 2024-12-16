@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  hashedPassword String
+  role          UserRole  @default(REGULAR)
+  university    String?
+  company       String?
+  title         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  chapter       Chapter?  @relation(fields: [chapterId], references: [id])
+  chapterId     String?
+  events        Event[]
+  resources     Resource[]
+}
+
+enum UserRole {
+  REGULAR
+  CHAPTER_HEAD
+  CLUB_ADMIN
+  ADVISOR
+  SPONSOR
+}
+
+model Chapter {
+  id          String    @id @default(cuid())
+  name        String
+  university  String
+  location    String
+  memberCount Int       @default(0)
+  leadEmail   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  members     User[]
+  events      Event[]
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  title       String
+  date        DateTime
+  location    String
+  description String
+  type        EventType
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  chapter     Chapter   @relation(fields: [chapterId], references: [id])
+  chapterId   String
+  organizer   User      @relation(fields: [organizerId], references: [id])
+  organizerId String
+}
+
+enum EventType {
+  WORKSHOP
+  MEETUP
+  CONFERENCE
+}
+
+model Resource {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  type        ResourceType
+  link        String
+  company     String?
+  deadline    DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  author      User         @relation(fields: [authorId], references: [id])
+  authorId    String
+}
+
+enum ResourceType {
+  JOB
+  PROJECT
+  LEARNING
+}
