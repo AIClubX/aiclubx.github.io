@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" }
+  ],
+  "functions": {
+    "api/**/*": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "env": {
+    "POSTGRES_URL": "@postgres-url",
+    "POSTGRES_PRISMA_URL": "@postgres-prisma-url",
+    "POSTGRES_URL_NON_POOLING": "@postgres-url-non-pooling",
+    "POSTGRES_USER": "@postgres-user",
+    "POSTGRES_HOST": "@postgres-host",
+    "POSTGRES_PASSWORD": "@postgres-password",
+    "POSTGRES_DATABASE": "@postgres-database",
+    "JWT_SECRET": "@jwt-secret",
+    "VITE_API_URL": "@api-url",
+    "VITE_GOOGLE_CLIENT_ID": "@google-client-id"
+  }
+}
